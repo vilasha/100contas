@@ -29,17 +29,32 @@ public class UserManager {
         userEntity.setProperty(User.FIRST_NAME, user.getFirstName());
         userEntity.setProperty(User.LAST_NAME, user.getLastName());
         userEntity.setProperty(User.EMAIL, user.getEmail());
-        Key userKey = DatastoreManager.getDatastoreService().put(userEntity);
+        Key userKey = DatastoreManager.datastore().put(userEntity);
         return userKey.getId();
     }
 
     public User readUser(Long userId) {
         try {
-            Entity userEntity = DatastoreManager.getDatastoreService().get(KeyFactory.createKey(USER_KIND, userId));
+            Entity userEntity = DatastoreManager.datastore().get(KeyFactory.createKey(USER_KIND, userId));
             return entityToUser(userEntity);
         } catch (EntityNotFoundException ex) {
             log.severe("Entity USER with id = " + userId + " not found");
             return null;
         }
+    }
+
+    public void updateUser(User user) {
+        Key key = KeyFactory.createKey(USER_KIND, user.getId());
+        Entity entity = new Entity(key);
+        entity.setProperty(User.USERNAME, user.getUsername());
+        entity.setProperty(User.FIRST_NAME, user.getFirstName());
+        entity.setProperty(User.LAST_NAME, user.getLastName());
+        entity.setProperty(User.EMAIL, user.getEmail());
+        DatastoreManager.datastore().put(entity);
+    }
+
+    public void deleteUser(Long userId) {
+        Key key = KeyFactory.createKey(USER_KIND, userId);
+        DatastoreManager.datastore().delete(key);
     }
 }

@@ -6,7 +6,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 public class DatastoreManager {
     private static DatastoreService service;
 
-    public static DatastoreService getDatastoreService() {
+    public static DatastoreService datastore() {
         if (service == null)
             service = DatastoreServiceFactory.getDatastoreService();
         return service;
